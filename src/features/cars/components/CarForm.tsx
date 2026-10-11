@@ -109,7 +109,7 @@ export function CarForm({ onCreate, disabled, isCreating }: Props) {
     setFieldErrors({});
 
     setSuccessMessage(
-      `${result.car.make} ${result.car.model} add to inventory!`,
+      `${result.car.make} ${result.car.model} added to inventory!`,
     );
   };
 
