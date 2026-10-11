@@ -18,10 +18,13 @@ import { useCars } from "../hooks/useCars";
 import { CarSortOrder } from "../types/types";
 import { CarList } from "../components/CarList";
 import { CarForm } from "../components/CarForm";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 export function CarInventoryPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState<CarSortOrder>("model-asc");
+
+  const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
 
   const {
     error,
@@ -31,7 +34,7 @@ export function CarInventoryPage() {
     allCars,
     createCar,
     visibleCars,
-  } = useCars({ searchTerm, sortOrder });
+  } = useCars({ searchTerm: debouncedSearchTerm, sortOrder });
 
   const handleSortChange = (event: SelectChangeEvent) => {
     setSortOrder(event.target.value as CarSortOrder);
@@ -43,7 +46,7 @@ export function CarInventoryPage() {
         <Stack spacing={3}>
           <Box>
             <Typography component="h1" variant="h3" fontWeight={800}>
-              Vehicle Inventory
+              Vehicle inventory
             </Typography>
 
             <Typography color="text.secondary" sx={{ mt: 1 }}>
@@ -76,10 +79,11 @@ export function CarInventoryPage() {
                 sx={{ minWidth: { xs: "100%", sm: 220 } }}
               >
                 <FormLabel
-                  htmlFor="search-model"
+                  id="car-sort-label"
+                  htmlFor="car-sort"
                   sx={{ mb: 0.5, color: "text.primary" }}
                 >
-                  Search by model
+                  Sort by
                 </FormLabel>
                 <Select
                   labelId="car-sort-label"
@@ -116,7 +120,7 @@ export function CarInventoryPage() {
                 </Button>
               }
             >
-              We couldn't load de vehicle inventory. Please try again.
+              We couldn't load the vehicle inventory. Please try again.
             </Alert>
           )}
 
@@ -129,7 +133,8 @@ export function CarInventoryPage() {
             allCars.length > 0 &&
             visibleCars.length === 0 && (
               <Alert severity="info">
-                No vehicles match "{searchTerm}". Try a different model search.
+                No vehicles match "{debouncedSearchTerm}". Try a different model
+                search.
               </Alert>
             )}
 
