@@ -1,6 +1,6 @@
 import { Alert, Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { CreateCarInput, CreateCarResult } from "../types/types";
-import { CarFormField } from "./CarFormField";
+import { CarFormInput } from "./CarFormInput";
 import { ChangeEvent, FormEvent, useState } from "react";
 
 type Props = {
@@ -140,7 +140,7 @@ export function CarForm({ onCreate, disabled, isCreating }: Props) {
 
         <Box component="form" noValidate onSubmit={handleSubmit}>
           <Stack spacing={1}>
-            <CarFormField
+            <CarFormInput
               id="car-make"
               label="Make"
               name="make"
@@ -149,7 +149,7 @@ export function CarForm({ onCreate, disabled, isCreating }: Props) {
               error={fieldErrors.make}
               disabled={disabled}
             />
-            <CarFormField
+            <CarFormInput
               id="car-model"
               label="Model"
               name="model"
@@ -158,7 +158,7 @@ export function CarForm({ onCreate, disabled, isCreating }: Props) {
               error={fieldErrors.model}
               disabled={disabled}
             />
-            <CarFormField
+            <CarFormInput
               id="car-year"
               label="Year"
               name="year"
@@ -167,7 +167,7 @@ export function CarForm({ onCreate, disabled, isCreating }: Props) {
               error={fieldErrors.year}
               disabled={disabled}
             />
-            <CarFormField
+            <CarFormInput
               id="car-color"
               label="Color"
               name="color"
