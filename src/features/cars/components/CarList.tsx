@@ -9,6 +9,8 @@ type Props = {
 export function CarList({ vehicles }: Props) {
   return (
     <Box
+      component="ul"
+      aria-label="Vehicle inventory"
       sx={{
         m: 0,
         p: 0,
