@@ -5,7 +5,11 @@ import type { ReactNode } from "react";
 
 import { useCars } from "@/features/cars/hooks/useCars";
 import { CREATE_CAR, GET_CARS } from "@/features/cars/api/operations";
-import { CarSortOrder, CreateCarInput } from "@/features/cars/types/types";
+import {
+  CarSortOrder,
+  CreateCarInput,
+  CreateCarMutationVariables,
+} from "@/features/cars/types/types";
 
 const cars = [
   {
@@ -48,6 +52,10 @@ const createdCar = {
   id: "4",
   model: "A6",
   year: 2025,
+  color: "Silver",
+  mobile: "/images/default-mobile.svg",
+  tablet: "/images/default-tablet.svg",
+  desktop: "/images/default-desktop.svg",
   __typename: "Car",
 };
 
@@ -61,6 +69,16 @@ const createInput: CreateCarInput = {
 const getCarsMock = {
   request: { query: GET_CARS },
   result: { data: { cars } },
+};
+
+const normalizedCreateInput: CreateCarMutationVariables["input"] = {
+  ...createInput,
+  make: "Audi",
+  model: "A6",
+  color: "Silver",
+  mobile: "/images/default-mobile.svg",
+  tablet: "/images/default-tablet.svg",
+  desktop: "/images/default-desktop.svg",
 };
 
 function createWrapper(mocks: MockedResponse[]) {
@@ -172,15 +190,7 @@ describe("useCars", () => {
         request: {
           query: CREATE_CAR,
           variables: {
-            input: {
-              ...createInput,
-              make: "Audi",
-              model: "A6",
-              color: "Silver",
-              mobile: "/images/q3-mobile.svg",
-              tablet: "/images/q3-tablet.svg",
-              desktop: "/images/q3-desktop.svg",
-            },
+            input: normalizedCreateInput,
           },
         },
         result: {
@@ -197,13 +207,13 @@ describe("useCars", () => {
       expect(result.current.allCars).toHaveLength(3);
     });
 
-    let response;
+    let response: Awaited<ReturnType<typeof result.current.createCar>>;
 
     await act(async () => {
       response = await result.current.createCar(createInput);
     });
 
-    expect(response).toEqual({
+    expect(response!).toEqual({
       ok: true,
       car: createdCar,
     });
@@ -222,15 +232,7 @@ describe("useCars", () => {
         request: {
           query: CREATE_CAR,
           variables: {
-            input: {
-              ...createInput,
-              make: "Audi",
-              model: "A6",
-              color: "Silver",
-              mobile: "/images/q3-mobile.svg",
-              tablet: "/images/q3-tablet.svg",
-              desktop: "/images/q3-desktop.svg",
-            },
+            input: normalizedCreateInput,
           },
         },
         result: {
@@ -274,15 +276,7 @@ describe("useCars", () => {
         request: {
           query: CREATE_CAR,
           variables: {
-            input: {
-              ...createInput,
-              make: "Audi",
-              model: "A6",
-              color: "Silver",
-              mobile: "/images/q3-mobile.svg",
-              tablet: "/images/q3-tablet.svg",
-              desktop: "/images/q3-desktop.svg",
-            },
+            input: normalizedCreateInput,
           },
         },
         error: new Error("Network error"),
