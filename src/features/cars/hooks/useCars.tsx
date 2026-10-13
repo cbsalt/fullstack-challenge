@@ -11,14 +11,15 @@ import { CREATE_CAR, GET_CARS } from "../api/operations";
 import { useCallback, useMemo } from "react";
 
 const DEFAULT_IMAGES = {
-  mobile: "/images/q3-mobile.svg",
-  tablet: "/images/q3-tablet.svg",
-  desktop: "/images/q3-desktop.svg",
+  mobile: "/images/default-mobile.svg",
+  tablet: "/images/default-tablet.svg",
+  desktop: "/images/default-desktop.svg",
 };
 
 type UseCarsOptions = {
   searchTerm: string;
   sortOrder: CarSortOrder;
+  onMutationError?: (error: unknown) => void;
 };
 
 function isBadUserInput(error: unknown): boolean {
@@ -30,7 +31,11 @@ function isBadUserInput(error: unknown): boolean {
   );
 }
 
-export function useCars({ searchTerm, sortOrder }: UseCarsOptions) {
+export function useCars({
+  searchTerm,
+  sortOrder,
+  onMutationError,
+}: UseCarsOptions) {
   const { data, loading, error, refetch } = useQuery<GetCarsQuery>(GET_CARS, {
     notifyOnNetworkStatusChange: true,
   });
@@ -81,9 +86,9 @@ export function useCars({ searchTerm, sortOrder }: UseCarsOptions) {
         model: input.model.trim(),
         color: input.color.trim(),
 
-        mobile: input.mobile ?? DEFAULT_IMAGES.mobile,
-        tablet: input.tablet ?? DEFAULT_IMAGES.tablet,
-        desktop: input.desktop ?? DEFAULT_IMAGES.desktop,
+        mobile: input.mobile?.trim() || DEFAULT_IMAGES.mobile,
+        tablet: input.tablet?.trim() || DEFAULT_IMAGES.tablet,
+        desktop: input.desktop?.trim() || DEFAULT_IMAGES.desktop,
       };
 
       try {
@@ -115,6 +120,8 @@ export function useCars({ searchTerm, sortOrder }: UseCarsOptions) {
           };
         }
 
+        onMutationError?.(error);
+
         return {
           ok: false,
           kind: "unknown",
@@ -122,7 +129,7 @@ export function useCars({ searchTerm, sortOrder }: UseCarsOptions) {
         };
       }
     },
-    [runCreateCar],
+    [runCreateCar, onMutationError],
   );
 
   return {
