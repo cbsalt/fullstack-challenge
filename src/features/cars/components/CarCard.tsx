@@ -36,19 +36,19 @@ export function CarCard({ vehicle }: Props) {
             objectFit: "cover",
           }}
         />
-
-        <CardContent>
-          <Stack spacing={0.5}>
-            <Typography component="h3" variant="h6" fontWeight={700}>
-              {vehicle.make} {vehicle.model}
-            </Typography>
-
-            <Typography color="text.secondary" variant="body2">
-              {vehicle.year} {vehicle.color}
-            </Typography>
-          </Stack>
-        </CardContent>
       </Box>
+
+      <CardContent>
+        <Stack spacing={0.5}>
+          <Typography component="h3" variant="h6" fontWeight={700}>
+            {vehicle.make} {vehicle.model}
+          </Typography>
+
+          <Typography color="text.secondary" variant="body2">
+            {vehicle.year} {vehicle.color}
+          </Typography>
+        </Stack>
+      </CardContent>
     </Card>
   );
 }
